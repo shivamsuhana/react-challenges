@@ -2,25 +2,25 @@
   {
     "challengeId": "01-user-profile",
     "challengeName": "User Profile Component",
-    "timestamp": "2026-01-29T14:22:07.863Z",
+    "timestamp": "2026-01-29T14:33:09.148Z",
     "scores": {
-      "functionalTests": 100,
+      "functionalTests": 60,
       "codeQuality": 100,
-      "architecture": 33.3,
+      "architecture": 0,
       "bestPractices": 100,
       "e2eTests": 0,
-      "aiReview": 93
+      "aiReview": 88
     },
-    "totalScore": 77.28,
-    "passed": true,
+    "totalScore": 59.2,
+    "passed": false,
     "errors": [],
     "warnings": [],
     "testResults": {
-      "score": 100,
-      "passed": true,
+      "score": 60,
+      "passed": false,
       "totalTests": 5,
-      "passedTests": 5,
-      "failedTests": 0,
+      "passedTests": 3,
+      "failedTests": 2,
       "details": [
         {
           "assertionResults": [
@@ -32,7 +32,7 @@
               "fullName": " Challenge 01: User Profile Component should render user name",
               "status": "passed",
               "title": "should render user name",
-              "duration": 23,
+              "duration": 22,
               "failureMessages": []
             },
             {
@@ -43,7 +43,7 @@
               "fullName": " Challenge 01: User Profile Component should render user email",
               "status": "passed",
               "title": "should render user email",
-              "duration": 4,
+              "duration": 5,
               "failureMessages": []
             },
             {
@@ -54,7 +54,7 @@
               "fullName": " Challenge 01: User Profile Component should render follow button",
               "status": "passed",
               "title": "should render follow button",
-              "duration": 87,
+              "duration": 86,
               "failureMessages": []
             },
             {
@@ -63,10 +63,16 @@
                 "Challenge 01: User Profile Component"
               ],
               "fullName": " Challenge 01: User Profile Component should toggle follow button state",
-              "status": "passed",
+              "status": "failed",
               "title": "should toggle follow button state",
-              "duration": 129,
-              "failureMessages": []
+              "duration": 87,
+              "failureMessages": [
+                "expect(element).toHaveTextContent()\n\nExpected element to have text content:\n  /following/i\nReceived:\n  Follow"
+              ],
+              "location": {
+                "line": 42,
+                "column": 20
+              }
             },
             {
               "ancestorTitles": [
@@ -74,19 +80,26 @@
                 "Challenge 01: User Profile Component"
               ],
               "fullName": " Challenge 01: User Profile Component should use useState for button state",
-              "status": "passed",
+              "status": "failed",
               "title": "should use useState for button state",
-              "duration": 1,
-              "failureMessages": []
+              "duration": 2,
+              "failureMessages": [
+                "expected '/**\\r\\n * Challenge 01: User Profile …' to contain 'useState'"
+              ],
+              "location": {
+                "line": 54,
+                "column": 27
+              }
             }
           ],
-          "startTime": 1769696530075,
-          "endTime": 1769696530320,
-          "status": "passed",
+          "startTime": 1769697191620,
+          "endTime": 1769697191822,
+          "status": "failed",
           "message": "",
           "name": "D:/Workspace/Projects/SOLO/Challenge-Engine/courses/01-react-fundamentals/project/tests/challenge-01.test.tsx"
         }
-      ]
+      ],
+      "error": "Command failed: npm test -- D:\\Workspace\\Projects\\SOLO\\Challenge-Engine\\courses\\01-react-fundamentals\\project\\tests\\challenge-01.test.tsx --run --reporter=json"
     },
     "lintResults": {
       "score": 100,
@@ -118,23 +131,21 @@
       ]
     },
     "architectureResults": {
-      "score": 33.3,
+      "score": 0,
       "passed": false,
-      "patternsFound": [
-        "useState"
-      ],
+      "patternsFound": [],
       "patternsMissing": [
         "functionalComponent",
+        "useState",
         "props"
       ],
       "details": [
         {
           "file": "src/components/UserProfile.tsx",
-          "patternsFound": [
-            "useState"
-          ],
+          "patternsFound": [],
           "patternsMissing": [
             "functionalComponent",
+            "useState",
             "props"
           ]
         }
@@ -157,45 +168,45 @@
       "passed": false,
       "error": "Command failed: npx playwright test D:\\Workspace\\Projects\\SOLO\\Challenge-Engine\\courses\\01-react-fundamentals\\project\\tests\\e2e\\challenge-01.spec.ts --reporter=json",
       "details": [],
-      "note": "E2E tests require the app to be running. Make sure to run \"npm run dev\" first, or tests will run automatically via Playwright webServer config."
+      "note": "E2E failed. The app is started automatically by Playwright (webServer in playwright.config)."
     },
     "aiReviewResults": {
       "challengeId": "01-user-profile",
-      "timestamp": "2026-01-29T14:22:15.540Z",
-      "score": 93,
+      "timestamp": "2026-01-29T14:33:18.001Z",
+      "score": 88,
       "feedback": [],
       "strengths": [
-        "Proper use of TypeScript with type annotations for props and state management",
-        "Clear and concise code structure with proper React patterns",
-        "Well-named variables and functions with descriptive names"
+        "Proper use of TypeScript with type annotations and interfaces",
+        "Correct implementation of React functional component pattern",
+        "Use of destructuring for props in function parameters"
       ],
       "improvements": [
-        "Consider using a more robust state management solution, such as Redux or MobX, for larger applications",
-        "Add input validation for props to ensure they are not null or undefined",
-        "Use a more robust way to handle conditional rendering, such as using a separate component for the follow button"
+        "Add proper state management for the follow button using React hooks (useState)",
+        "Implement conditional rendering for the follow button state using a ternary operator or &&",
+        "Consider adding a loading state or error handling for the avatar image"
       ],
-      "readability": 90,
-      "maintainability": 95,
-      "overall": "The provided code is well-structured, readable, and follows best practices for React development. However, there are some areas for improvement, such as considering a more robust state management solution and adding input validation for props."
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The provided code demonstrates a good understanding of React and TypeScript fundamentals. However, it lacks proper state management for the follow button, which is a critical feature of the challenge. With some improvements in this area, the code can be made more maintainable and efficient."
     },
     "aiResults": {
       "challengeId": "01-user-profile",
-      "timestamp": "2026-01-29T14:22:15.540Z",
-      "score": 93,
+      "timestamp": "2026-01-29T14:33:18.001Z",
+      "score": 88,
       "feedback": [],
       "strengths": [
-        "Proper use of TypeScript with type annotations for props and state management",
-        "Clear and concise code structure with proper React patterns",
-        "Well-named variables and functions with descriptive names"
+        "Proper use of TypeScript with type annotations and interfaces",
+        "Correct implementation of React functional component pattern",
+        "Use of destructuring for props in function parameters"
       ],
       "improvements": [
-        "Consider using a more robust state management solution, such as Redux or MobX, for larger applications",
-        "Add input validation for props to ensure they are not null or undefined",
-        "Use a more robust way to handle conditional rendering, such as using a separate component for the follow button"
+        "Add proper state management for the follow button using React hooks (useState)",
+        "Implement conditional rendering for the follow button state using a ternary operator or &&",
+        "Consider adding a loading state or error handling for the avatar image"
       ],
-      "readability": 90,
-      "maintainability": 95,
-      "overall": "The provided code is well-structured, readable, and follows best practices for React development. However, there are some areas for improvement, such as considering a more robust state management solution and adding input validation for props."
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The provided code demonstrates a good understanding of React and TypeScript fundamentals. However, it lacks proper state management for the follow button, which is a critical feature of the challenge. With some improvements in this area, the code can be made more maintainable and efficient."
     }
   }
 ]

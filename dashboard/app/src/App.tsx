@@ -476,7 +476,7 @@ export default function App() {
                 <section className="result-layer">
                   <h4>Functional tests</h4>
                   <div className="result-layer-score">
-                    Score: {detail.result.testResults.score.toFixed(0)}%
+                    Score: {typeof detail.result.testResults.score === 'number' ? `${detail.result.testResults.score.toFixed(0)}%` : '—'}
                     {detail.result.testResults.totalTests != null && (
                       <> · {detail.result.testResults.passedTests ?? 0}/{detail.result.testResults.totalTests} passed</>
                     )}
@@ -504,7 +504,7 @@ export default function App() {
                 <section className="result-layer">
                   <h4>Code quality (lint)</h4>
                   <div className="result-layer-score">
-                    Score: {detail.result.lintResults.score.toFixed(0)}%
+                    Score: {typeof detail.result.lintResults.score === 'number' ? `${detail.result.lintResults.score.toFixed(0)}%` : '—'}
                     {detail.result.lintResults.errors != null && detail.result.lintResults.warnings != null && (
                       <> · {detail.result.lintResults.errors} error(s), {detail.result.lintResults.warnings} warning(s)</>
                     )}
@@ -526,7 +526,7 @@ export default function App() {
                 <section className="result-layer">
                   <h4>Architecture</h4>
                   <div className="result-layer-score">
-                    Score: {detail.result.architectureResults.score.toFixed(0)}%
+                    Score: {typeof detail.result.architectureResults.score === 'number' ? `${detail.result.architectureResults.score.toFixed(0)}%` : '—'}
                   </div>
                   {detail.result.architectureResults.patternsMissing?.length ? (
                     <>
@@ -559,7 +559,7 @@ export default function App() {
                 <section className="result-layer">
                   <h4>Best practices</h4>
                   <div className="result-layer-score">
-                    Score: {detail.result.bestPracticesResults.score.toFixed(0)}%
+                    Score: {typeof detail.result.bestPracticesResults.score === 'number' ? `${detail.result.bestPracticesResults.score.toFixed(0)}%` : '—'}
                   </div>
                   {detail.result.bestPracticesResults.issues?.map((issue, i) => (
                     <p key={i} className="result-issue-msg">• {typeof issue === 'string' ? issue : (issue as { message?: string }).message ?? 'Issue'}</p>
@@ -581,7 +581,7 @@ export default function App() {
                 <section className="result-layer">
                   <h4>E2E tests</h4>
                   <div className="result-layer-score">
-                    Score: {detail.result.e2eResults.score.toFixed(0)}%
+                    Score: {typeof detail.result.e2eResults.score === 'number' ? `${detail.result.e2eResults.score.toFixed(0)}%` : '—'}
                   </div>
                   {detail.result.e2eResults.error && (
                     <p className="result-layer-error">{detail.result.e2eResults.error}</p>

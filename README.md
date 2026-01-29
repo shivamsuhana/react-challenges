@@ -77,22 +77,24 @@ npm run dev
 
 
 
+
+
 ## 📈 Progress Summary
 
-**Last updated:** 1/29/2026, 7:52:16 PM
+**Last updated:** 1/29/2026, 8:03:19 PM
 
 ### Pathway
 
 | Metric | Value |
 |--------|-------|
-| Challenges completed | 1 / 9 (11.1%) |
-| Overall score | 40.4% |
+| Challenges completed | 0 / 9 (0%) |
+| Overall score | 34.4% |
 
 ### By course
 
 | Course | Completed | Score | Status |
 |--------|-----------|-------|--------|
-| React Fundamentals | 1/3 (0.3%) | 77.3% | Pass |
+| React Fundamentals | 0/3 (0%) | 59.2% | Fail |
 | RTK Query | 0/3 (0%) | 21.9% | Fail |
 | Next.js App Router | 0/3 (0%) | 22.5% | Fail |
 
