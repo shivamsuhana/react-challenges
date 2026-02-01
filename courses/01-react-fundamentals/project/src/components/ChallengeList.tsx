@@ -23,6 +23,9 @@ const challenges = [
   { id: '18-usereducer-complex-state', name: 'useReducer - Complex State Management', route: '/challenge/18-usereducer-complex-state' },
   { id: '19-performance-optimization', name: 'Performance Optimization', route: '/challenge/19-performance-optimization' },
   { id: '20-error-boundaries', name: 'Error Boundaries and Error Handling', route: '/challenge/20-error-boundaries' },
+  { id: '21-react-router', name: 'React Router - Routing and Navigation', route: '/challenge/21-react-router' },
+  { id: '22-data-fetching', name: 'Data Fetching - Loading and Error State', route: '/challenge/22-data-fetching' },
+  { id: '23-useref-focus-management', name: 'useRef - Focus Management', route: '/challenge/23-useref-focus-management' },
 ]
 
 export default function ChallengeList() {

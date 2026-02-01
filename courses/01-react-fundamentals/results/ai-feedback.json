@@ -46,29 +46,6 @@
     }
   },
   {
-    "challengeId": "01-static-task-display",
-    "challengeName": "Static Task Display",
-    "aiReview": {
-      "challengeId": "01-static-task-display",
-      "timestamp": "2026-01-31T16:56:16.458Z",
-      "score": 88,
-      "feedback": [],
-      "strengths": [
-        "The code is well-structured and follows a consistent naming convention.",
-        "The use of TypeScript and functional components is a good practice.",
-        "The code includes proper type definitions and interfaces, making it easier to understand and maintain."
-      ],
-      "improvements": [
-        "Some of the functions, such as `getDueDateLabel`, are quite complex and could be broken down into smaller, more manageable functions.",
-        "The `TaskCard` component has a lot of props, which can make it harder to understand and maintain. Consider using a more modular approach, such as using separate components for each section of the card.",
-        "The code could benefit from more comments and explanations, especially in complex areas like the `getDueDateLabel` function."
-      ],
-      "readability": 85,
-      "maintainability": 90,
-      "overall": "The code is well-structured and follows good practices, but there are some areas that could be improved for better maintainability and readability."
-    }
-  },
-  {
     "challengeId": "22-data-fetching",
     "challengeName": "Data Fetching - Loading and Error State",
     "aiReview": {
@@ -158,6 +135,29 @@
       "readability": 85,
       "maintainability": 90,
       "overall": "The code is well-structured and follows good practices, but there are some areas for improvement to make it more maintainable and efficient."
+    }
+  },
+  {
+    "challengeId": "01-static-task-display",
+    "challengeName": "Static Task Display",
+    "aiReview": {
+      "challengeId": "01-static-task-display",
+      "timestamp": "2026-02-01T09:47:25.151Z",
+      "score": 88,
+      "feedback": [],
+      "strengths": [
+        "The code is well-structured and follows a consistent naming convention.",
+        "The use of TypeScript and functional components makes the code more maintainable and easier to understand.",
+        "The code includes a good amount of comments and explanations, making it easier for others to understand the logic and intent behind the code."
+      ],
+      "improvements": [
+        "Some of the function names could be more descriptive. For example, `getDueDateLabel` could be renamed to `getDueDateStatusLabel` to better indicate its purpose.",
+        "The `TaskCard` component has a lot of props, which can make it harder to understand and maintain. Consider breaking it down into smaller, more focused components.",
+        "The `TaskList` component uses a hardcoded array of tasks. Consider replacing this with a more dynamic approach, such as fetching tasks from an API or using a state management library like Redux."
+      ],
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The code is well-structured and maintainable, with a good balance of readability and performance. However, there are some areas for improvement, such as reducing the number of props in the `TaskCard` component and using a more dynamic approach to fetching tasks in the `TaskList` component."
     }
   }
 ]
