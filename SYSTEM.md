@@ -738,6 +738,114 @@ README evidence (human-readable in READMEs)
 
 ---
 
+## Guidelines & Learnings (from React Fundamentals)
+
+Use these when creating or auditing challenges in **any** course (React Fundamentals, RTK Query, Next.js, etc.) so behavior is consistent and learner-ready.
+
+### 1. Learner-ready project: no solution code
+
+- **Rule:** Whatever a challenge README says to **create**, **add**, or **implement** must **not** already be done in the project. The learner should read the README and do that work.
+- **Stubs only:** Keep minimal stubs so the app **builds** and routes exist: e.g. components that `return null` or a minimal element with **required `id`s** so unit and E2E tests can find elements (e.g. `id="filter-bar"`, `id="task-detail-page"`). Export any types/interfaces the app or tests need (e.g. `Task` from TaskList).
+- **Do not pre-implement later steps:** If Challenge A says "Create FilterBar" and Challenge B says "Add a search input to FilterBar", the stub FilterBar must not include the search input. Otherwise the learner has nothing to add in B.
+- **Example:** FilterBar stub = `<div id="filter-bar" />` only. Learner creates FilterBar with All/Active/Completed in Ch06 and adds search input in Ch09. TaskDetailPage stub = `<div id="task-detail-page" />`; learner adds useParams, back button, content in Ch21.
+- **Remove solution-only code:** e.g. delete `taskReducer.ts` when handing to learners; App uses `useState` until the learner implements useReducer in the reducer challenge. Keep an empty `reducers/` with `.gitkeep` if the README asks them to create a file there.
+- **In-app challenge list:** If the project has a ChallengeList or similar, keep it minimal and **include all challenges** from course-config (e.g. 01–23) so learners can navigate to every challenge route.
+
+### 2. README vs project audit
+
+- Before shipping a course to learners, for **every** challenge README:
+  - List each instruction: "Create X", "Add Y", "Implement Z".
+  - Confirm that X/Y/Z is **not** already fully implemented in the project (stubs and wiring are OK; real logic/content must be left to the learner).
+- Files that exist only so the app compiles (e.g. TaskCard, TaskList, TaskForm, TaskApp, ThemeContext, ErrorBoundary) should be **stubs**: minimal signature and return value, no solution logic. Learner fills in implementation per README.
+
+### 3. Review engine: merge results by challenge
+
+- **Requirement:** When the workflow runs, the dashboard runs a review, or a single-challenge CLI run executes, only the **reviewed** challenge(s) should be updated in `challenge-results.json`. Other challenges’ results must be preserved.
+- **Implementation:** In each course `review-engine/index.js`:
+  - Load existing `challenge-results.json` (array).
+  - Run only the requested challenge(s) (from `--challenge=ID` or all if omitted).
+  - Merge: keep existing entries for challenges **not** run; replace only entries for challenges that were run.
+  - Sort merged array by course config challenge order (stable output).
+  - Write merged results; regenerate `course-summary.json` from the full merged list. Merge `ai-feedback.json` the same way (keep non-run, replace run).
+- This way workflow, dashboard, and CLI all update only the relevant challenges without overwriting others.
+
+### 4. CI / GitHub Actions
+
+- **Checkout:** Use `fetch-depth: 2` (or more) in the checkout step. With default `fetch-depth: 1`, `git diff HEAD~1 HEAD` has no parent commit and fails or is empty, so CI may run "run all reviews" on every push (slow and brittle).
+- **Changed-files logic:** With `fetch-depth: 2`, the diff works and "review changed" runs instead of "run all", so only affected challenges are reviewed.
+- **Workflow name:** Use the product name consistently (e.g. "SOLO Challenges: Review").
+
+### 5. Package lock and npm ci
+
+- Keep `package.json` and `package-lock.json` in sync for every course project (and review-engine). Run `npm install` in each and commit the lock file so CI `npm ci` succeeds. Out-of-sync lock files cause `EUSAGE` (missing deps like eslint-visitor-keys, acorn, etc.) in CI.
+
+### 6. Course project README table
+
+- `update-readme-evidence.js` should write a **challenges table** in each course project README: **Challenge | Skills covered | Status**.
+- **Skills:** From each challenge’s `metadata.json` (`skills` array). Read course config for challenge list order; for each challenge, read `challenges/{id}/metadata.json` for skills.
+- **Status:** From `challenge-results.json` (Passed / Not passed) or "—" if not yet run. List **all** challenges from course config so the table is complete. Table updates whenever review runs (via `update-progress.js` → `update-readme-evidence.js`).
+
+### 7. Challenge READMEs: practical blurbs
+
+- For challenges that teach a **key concept** (useState, useEffect, useMemo, Context, useReducer, Error boundaries, Router, useRef, etc.), add a short **"In practice"** block (3–4 lines) after **Goal**: when the concept is used and why it matters for production or code quality. Only for concepts that justify it; not every challenge needs one.
+
+### 8. metadata.json and file-to-challenge map
+
+- **metadata.json** per challenge must include:
+  - `challengeId`, `challengeName`
+  - `filesToCheck`: array of **project-relative** paths (e.g. `["src/components/TaskCard.tsx"]`) so `file-to-challenge-map.js` can map changed files to challenges for smart review.
+  - `skills`: array of strings (for README table and dashboard).
+  - `patternsRequired`: used by the architecture checker (e.g. `["functionalComponent", "useState", "useMemo"]`).
+- If a challenge involves forms, include "Form handling" (or similar) in `skills` where appropriate.
+
+### 9. Architecture checker
+
+- Accept **equivalent patterns** so learners aren’t penalized for valid alternatives: e.g. `useReducer` satisfying a "useState" or state-update requirement, `useRef` when the challenge requires refs. Add these in `review-engine/architecture-checker.js` so pattern matching recognizes them.
+
+### 10. E2E tests and Playwright
+
+- **Port:** Use a dedicated port in CI (e.g. 5174) in Playwright config so it doesn’t clash with a dev server. E2E runner can retry with alternate ports (e.g. 5175–5180) on port-in-use.
+- **Flakiness:** Avoid assertions that are flaky in CI (e.g. `toBeFocused()`). Prefer visibility and attribute checks (e.g. input visible, `type="text"`).
+- **Browsers:** `postinstall` in the course project can install Chromium so learners and CI don’t need extra steps; document or support `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` for CI when browsers are cached.
+
+### 11. Progress and results for learner handoff
+
+- When giving the repo to learners, reset so no challenge appears completed:
+  - Set `challenge-results.json` to `[]` and `course-summary.json` to 0 completed / 0% for each course.
+  - Run `update-progress.js` so `learner-results/progress.json` and README evidence show 0% and no completed challenges. Learners see a clean slate.
+
+### 12. HTTP client and scope
+
+- React Fundamentals uses **fetch** for the data-fetching challenge; **Axios** is not in scope. If you have a separate RTK/RTK Query (or API) course, keep Axios there if needed; don’t add it to React Fundamentals.
+
+### 14. Dashboard: skills and metadata
+
+- **Skills:** Serve `skills` from each challenge's `metadata.json` in the challenge-detail API (`/api/courses/:courseId/challenges/:challengeId`) so the dashboard can show skills on the detail page. Optionally omit from the list API to keep payloads small.
+- **Robustness:** When reading metadata (e.g. `getChallengeMetadata` in dashboard server), use **try/catch** and resolve **ROOT** from `import.meta.url` / `__dirname` so it works from repo root, `dashboard/`, or different CWDs. Handle missing `metadata.json` or missing `skills` (default to `[]`).
+- **Client fallback:** On the detail page, use `detail.skills ?? detail.metadata?.skills ?? []` so both flat and nested API shapes work.
+
+### 15. README clarity for learners
+
+- **Alternatives:** If a challenge accepts more than one approach (e.g. `useState` or `useReducer`), say so in the README so learners aren't confused when tests pass with either.
+- **Props and routes:** When a challenge involves routing (e.g. task detail page), clarify whether the app should pass a prop like `linkToTaskDetail` from App into list/card components, or use a shared route base; tests and stubs should match.
+- **Hooks and deps:** For challenges involving `useCallback`/`useEffect`, mention dependency arrays in Technical Requirements so learners know what the tests expect.
+- **Accessibility:** If tests expect specific `id`s for messages (e.g. empty state), document the required `id` in the README so screen readers and tests align.
+
+### Checklist for new courses/challenges
+
+- [ ] Learner-ready: stubs only; nothing the README asks to create/add/implement is already done.
+- [ ] README audit: every "Create X" / "Add Y" checked against project; no pre-implementation.
+- [ ] Review engine merges results by challenge; sorted by config order.
+- [ ] CI: fetch-depth ≥ 2; package-lock in sync for npm ci.
+- [ ] README evidence: challenge table with Skills + Status; practical blurbs where useful.
+- [ ] metadata.json: filesToCheck, skills, patternsRequired.
+- [ ] Architecture checker: equivalent patterns (useReducer, useRef, etc.) accepted.
+- [ ] E2E: stable assertions; port and retry strategy for CI.
+- [ ] Handoff: results and progress reset to empty/0%.
+- [ ] When adding challenges: update `course-config.json`, project README challenge list, and any in-app ChallengeList/nav so all challenge routes are reachable.
+
+---
+
 ### Adding a New Course
 
 1. **Create course directory**: `courses/{course-id}/`
