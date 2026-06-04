@@ -13,28 +13,12 @@
     "01-react-fundamentals": {
       "courseId": "01-react-fundamentals",
       "courseName": "React Fundamentals",
-      "averageScore": 51.5,
+      "averageScore": 0,
       "completionPercentage": 0,
       "badgeLevel": "none",
       "totalChallenges": 23,
       "completedChallenges": 0,
-      "challenges": {
-        "02-dynamic-task-rendering": {
-          "challengeId": "02-dynamic-task-rendering",
-          "challengeName": "Dynamic Task Rendering",
-          "passed": false,
-          "score": 51.45,
-          "lastRun": "2026-02-06T11:29:59.511Z",
-          "scores": {
-            "functionalTests": 20,
-            "codeQuality": 80,
-            "architecture": 100,
-            "bestPractices": 100,
-            "e2eTests": 0,
-            "aiReview": 83
-          }
-        }
-      }
+      "challenges": {}
     },
     "02-redux-rtk-query": {
       "courseId": "02-redux-rtk-query",
