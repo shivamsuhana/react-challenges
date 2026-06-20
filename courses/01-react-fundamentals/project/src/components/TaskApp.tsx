@@ -1,8 +1,7 @@
 
-
 import { useEffect } from 'react';
 import TaskList, { Task } from './TaskList';
-import TaskForm from './TaskForm'; 
+import TaskForm from './TaskForm';
 
 interface TaskAppProps {
   tasks?: Task[];
@@ -19,28 +18,47 @@ const INITIAL_TASKS: Task[] = [
   { id: 5, title: 'Fifth Task', description: 'Desc 5', priority: 'Medium', completed: false },
 ];
 
-export default function TaskApp({ tasks = [], setTasks, showForm }: TaskAppProps) {
+export default function TaskApp({ tasks = [], setTasks, showForm, countFormat }: TaskAppProps) {
   
-  useEffect(() => {
+
+
+    useEffect(() => {
     if (tasks.length === 0 && setTasks) {
       setTasks(INITIAL_TASKS);
     }
-  }, []); 
+  }, []);
 
-  const handleAddTask = (newTask: Task) => {
+
+
+    const handleAddTask = (newTask: Task) => {
     if (setTasks) {
       
       setTasks([...tasks, newTask]);
     }
   };
 
-  const countText = `${tasks.length} Tasks`;
+  
+  const handleToggle = (id: number) => {
+    if (setTasks) {
+      const updatedTasks = tasks.map(t => 
+        t.id === id ? { ...t, completed: !t.completed } : t
+      );
+      setTasks(updatedTasks);
+    }
+  };
+
+  
+  const completedCount = tasks.filter(t => t.completed).length;
+  
+  const countText = countFormat === 'completed' 
+    ? `${completedCount} of ${tasks.length} completed` 
+    : `${tasks.length} Tasks`;
 
   return (
     <div>
       <div id="task-count">{countText}</div>
       {showForm && <TaskForm onAddTask={handleAddTask} />}
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} onToggle={handleToggle} />
     </div>
   );
 }
