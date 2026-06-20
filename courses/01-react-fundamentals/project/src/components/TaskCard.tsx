@@ -7,10 +7,16 @@ interface TaskCardProps {
   priority: 'Low' | 'Medium' | 'High';
   completed?: boolean;
   onToggle?: () => void;
+  onDelete?: () => void;
 }
 
-export default function TaskCard({ title, description, priority, completed = false, onToggle }: TaskCardProps) {
+export default function TaskCard({ title, description, priority, completed = false, onToggle, onDelete }: TaskCardProps) {
   const textStyle = { textDecoration: completed ? 'line-through' : 'none' };
+  const handleDeleteClick = () => {
+    if (window.confirm("Are you sure?")) {
+      if (onDelete) onDelete();
+    }
+  };
 
   return (
     <div style={textStyle} data-completed={completed} className="task-card">
@@ -30,6 +36,10 @@ export default function TaskCard({ title, description, priority, completed = fal
           />
           Complete
         </label>
+      )}
+
+      {onDelete && (
+        <button onClick={handleDeleteClick}>Delete</button>
       )}
 
     </div>

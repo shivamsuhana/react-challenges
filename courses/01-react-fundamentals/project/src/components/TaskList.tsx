@@ -13,6 +13,7 @@ export interface Task {
 interface TaskListProps {
   tasks: Task[];
   onToggle?: (id: number) => void;
+  onDelete?: (id: number) => void;
 }
 
 // // justfor fallback case
@@ -22,7 +23,7 @@ interface TaskListProps {
 //   { id: 3, title: 'Task Three', description: 'Third hardcoded task', priority: 'Low', completed: false },
 // ];
 
-export default function TaskList({ tasks, onToggle }: TaskListProps) {
+export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
 const completedCount = tasks.filter(t => t.completed).length;
 
   return (
@@ -43,6 +44,7 @@ const completedCount = tasks.filter(t => t.completed).length;
           priority={task.priority}
           completed={task.completed} 
           onToggle={onToggle ? () => onToggle(task.id) : undefined} 
+          onDelete={onDelete ? () => onDelete(task.id) : undefined}
         />
       ))}
     </div>

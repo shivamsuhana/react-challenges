@@ -46,11 +46,20 @@ export default function TaskApp({ tasks = [], setTasks, showForm,  }: TaskAppPro
     }
   };
 
+  const handleDelete = (id: number) => {
+    if (setTasks) {
+      setTasks(tasks.filter(t => t.id !== id));
+    }
+  };
+
 
   return (
     <div>
       {showForm && <TaskForm onAddTask={handleAddTask} />}
-      <TaskList tasks={tasks} onToggle={handleToggle} />
+      <TaskList 
+      tasks={tasks} 
+      onToggle={handleToggle}
+      onDelete={handleDelete} />
     </div>
   );
 }
