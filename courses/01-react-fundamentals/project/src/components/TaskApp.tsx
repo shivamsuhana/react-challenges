@@ -1,5 +1,8 @@
+
+
 import { useEffect } from 'react';
 import TaskList, { Task } from './TaskList';
+import TaskForm from './TaskForm'; 
 
 interface TaskAppProps {
   tasks?: Task[];
@@ -16,7 +19,7 @@ const INITIAL_TASKS: Task[] = [
   { id: 5, title: 'Fifth Task', description: 'Desc 5', priority: 'Medium', completed: false },
 ];
 
-export default function TaskApp({ tasks = [], setTasks, }: TaskAppProps) {
+export default function TaskApp({ tasks = [], setTasks, showForm }: TaskAppProps) {
   
   useEffect(() => {
     if (tasks.length === 0 && setTasks) {
@@ -24,12 +27,20 @@ export default function TaskApp({ tasks = [], setTasks, }: TaskAppProps) {
     }
   }, []); 
 
+  const handleAddTask = (newTask: Task) => {
+    if (setTasks) {
+      
+      setTasks([...tasks, newTask]);
+    }
+  };
+
   const countText = `${tasks.length} Tasks`;
 
   return (
     <div>
-      <h2 id="task-count">{countText}</h2>
-      <TaskList tasks={tasks} countText={countText} />
+      <div id="task-count">{countText}</div>
+      {showForm && <TaskForm onAddTask={handleAddTask} />}
+      <TaskList tasks={tasks} />
     </div>
   );
 }
