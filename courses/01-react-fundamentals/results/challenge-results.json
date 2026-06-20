@@ -1330,25 +1330,25 @@
   {
     "challengeId": "04-task-completion-toggle",
     "challengeName": "Task Completion Toggle",
-    "timestamp": "2026-06-20T11:07:53.470Z",
+    "timestamp": "2026-06-20T12:04:23.108Z",
     "scores": {
-      "functionalTests": 33.3,
+      "functionalTests": 66.7,
       "codeQuality": 100,
       "architecture": 100,
       "bestPractices": 100,
       "e2eTests": 100,
       "aiReview": 88
     },
-    "totalScore": 74.855,
-    "passed": false,
+    "totalScore": 86.545,
+    "passed": true,
     "errors": [],
     "warnings": [],
     "testResults": {
-      "score": 33.3,
+      "score": 66.7,
       "passed": false,
       "totalTests": 6,
-      "passedTests": 2,
-      "failedTests": 4,
+      "passedTests": 4,
+      "failedTests": 2,
       "details": [
         {
           "assertionResults": [
@@ -1360,7 +1360,7 @@
               "fullName": " Challenge 04: Task Completion Toggle TaskCard should render checkbox when onToggle provided",
               "status": "passed",
               "title": "TaskCard should render checkbox when onToggle provided",
-              "duration": 40,
+              "duration": 39,
               "failureMessages": []
             },
             {
@@ -1382,7 +1382,7 @@
               "fullName": " Challenge 04: Task Completion Toggle TaskCard should show strike-through when completed",
               "status": "failed",
               "title": "TaskCard should show strike-through when completed",
-              "duration": 9,
+              "duration": 8,
               "failureMessages": [
                 "expect(element).toHaveStyle()\n\n- Expected\n\n- textDecoration: line-through;"
               ],
@@ -1414,16 +1414,10 @@
                 "Challenge 04: Task Completion Toggle"
               ],
               "fullName": " Challenge 04: Task Completion Toggle TaskList should pass onToggle to TaskCard when tasks provided",
-              "status": "failed",
+              "status": "passed",
               "title": "TaskList should pass onToggle to TaskCard when tasks provided",
-              "duration": 16,
-              "failureMessages": [
-                "Unable to find an element with the text: 1 of 2 completed. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\nIgnored nodes: comments, script, style\n\u001b[36m<body>\u001b[39m\n  \u001b[36m<div>\u001b[39m\n    \u001b[36m<div>\u001b[39m\n      \u001b[36m<div\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"task-card\"\u001b[39m\n        \u001b[33mdata-completed\u001b[39m=\u001b[32m\"false\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<div\u001b[39m\n          \u001b[33mstyle\u001b[39m=\u001b[32m\"text-decoration: none;\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<h2>\u001b[39m\n            \u001b[0mTask 1\u001b[0m\n          \u001b[36m</h2>\u001b[39m\n          \u001b[36m<p>\u001b[39m\n            \u001b[0mD1\u001b[0m\n          \u001b[36m</p>\u001b[39m\n          \u001b[36m<p>\u001b[39m\n            \u001b[0mPriority: \u001b[0m\n            \u001b[0mHigh\u001b[0m\n          \u001b[36m</p>\u001b[39m\n        \u001b[36m</div>\u001b[39m\n        \u001b[36m<label>\u001b[39m\n          \u001b[36m<input\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"checkbox\"\u001b[39m\n          \u001b[36m/>\u001b[39m\n          \u001b[0mComplete\u001b[0m\n        \u001b[36m</label>\u001b[39m\n      \u001b[36m</div>\u001b[39m\n      \u001b[36m<div\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"task-card\"\u001b[39m\n        \u001b[33mdata-completed\u001b[39m=\u001b[32m\"true\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<div\u001b[39m\n          \u001b[33mstyle\u001b[39m=\u001b[32m\"text-decoration: line-through;\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<h2>\u001b[39m\n            \u001b[0mTask 2\u001b[0m\n          \u001b[36m</h2>\u001b[39m\n          \u001b[36m<p>\u001b[39m\n            \u001b[0mD2\u001b[0m\n          \u001b[36m</p>\u001b[39m\n          \u001b[36m<p>\u001b[39m\n            \u001b[0mPriority: \u001b[0m\n            \u001b[0mMedium\u001b[0m\n          \u001b[36m</p>\u001b[39m\n        \u001b[36m</div>\u001b[39m\n        \u001b[36m<label>\u001b[39m\n          \u001b[36m<input\u001b[39m\n            \u001b[33mchecked\u001b[39m=\u001b[32m\"\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"checkbox\"\u001b[39m\n          \u001b[36m/>\u001b[39m\n          \u001b[0mComplete\u001b[0m\n        \u001b[36m</label>\u001b[39m\n      \u001b[36m</div>\u001b[39m\n    \u001b[36m</div>\u001b[39m\n  \u001b[36m</div>\u001b[39m\n\u001b[36m</body>\u001b[39m"
-              ],
-              "location": {
-                "line": 37,
-                "column": 19
-              }
+              "duration": 15,
+              "failureMessages": []
             },
             {
               "ancestorTitles": [
@@ -1431,20 +1425,14 @@
                 "Challenge 04: Task Completion Toggle"
               ],
               "fullName": " Challenge 04: Task Completion Toggle count text should show X of Y completed format",
-              "status": "failed",
+              "status": "passed",
               "title": "count text should show X of Y completed format",
               "duration": 1,
-              "failureMessages": [
-                "expect(received).toHaveTextContent()\n\nreceived value must be a Node.\n"
-              ],
-              "location": {
-                "line": 67,
-                "column": 21
-              }
+              "failureMessages": []
             }
           ],
-          "startTime": 1781953674418,
-          "endTime": 1781953674504,
+          "startTime": 1781957063921,
+          "endTime": 1781957064004,
           "status": "failed",
           "message": "",
           "name": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-04.test.tsx"
@@ -1610,12 +1598,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 318,
+                          "duration": 301,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-06-20T11:07:57.030Z",
+                          "startTime": "2026-06-20T12:04:26.458Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -1644,12 +1632,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 94,
+                          "duration": 104,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-06-20T11:07:57.699Z",
+                          "startTime": "2026-06-20T12:04:27.070Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -1678,12 +1666,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 179,
+                          "duration": 170,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-06-20T11:07:57.797Z",
+                          "startTime": "2026-06-20T12:04:27.178Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -1712,12 +1700,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 96,
+                          "duration": 97,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2026-06-20T11:07:57.981Z",
+                          "startTime": "2026-06-20T12:04:27.353Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -1739,41 +1727,41 @@
     },
     "aiReviewResults": {
       "challengeId": "04-task-completion-toggle",
-      "timestamp": "2026-06-20T11:07:58.128Z",
+      "timestamp": "2026-06-20T12:04:27.499Z",
       "score": 88,
       "feedback": [],
       "strengths": [
-        "The code is well-structured and follows a consistent naming convention.",
-        "The use of interfaces and type annotations is excellent and helps with code readability and maintainability.",
-        "The code is well-organized and easy to follow."
+        "The code is well-structured and easy to follow, with clear and concise function and variable names.",
+        "The use of TypeScript and functional components is a good practice, making the code more maintainable and efficient.",
+        "The code is well-organized, with each component having its own file and a clear separation of concerns."
       ],
       "improvements": [
-        "In the `TaskCard` component, the `textStyle` object can be extracted into a separate constant or a utility function to make the code more readable.",
-        "In the `TaskList` component, the `list` variable can be renamed to something more descriptive, such as `tasks` or `renderedTasks`.",
-        "In the `TaskApp` component, the `handleToggle` function can be extracted into a separate function to make the code more modular and easier to test."
+        "In the `TaskCard` component, the `textStyle` object can be extracted into a separate constant to make the code more readable.",
+        "In the `TaskList` component, the `completedCount` variable can be extracted into a separate function to make the code more reusable.",
+        "The `onToggle` function in the `TaskList` component can be simplified by using the `map` function to create a new array with the updated `completed` property."
       ],
       "readability": 85,
       "maintainability": 90,
-      "overall": "The code is well-structured, maintainable, and follows best practices. However, there are a few minor improvements that can be made to make the code even more readable and maintainable."
+      "overall": "The code is well-structured, maintainable, and efficient. However, there are a few areas for improvement to make the code even more readable and efficient. With some minor adjustments, the code can be considered excellent."
     },
     "aiResults": {
       "challengeId": "04-task-completion-toggle",
-      "timestamp": "2026-06-20T11:07:58.128Z",
+      "timestamp": "2026-06-20T12:04:27.499Z",
       "score": 88,
       "feedback": [],
       "strengths": [
-        "The code is well-structured and follows a consistent naming convention.",
-        "The use of interfaces and type annotations is excellent and helps with code readability and maintainability.",
-        "The code is well-organized and easy to follow."
+        "The code is well-structured and easy to follow, with clear and concise function and variable names.",
+        "The use of TypeScript and functional components is a good practice, making the code more maintainable and efficient.",
+        "The code is well-organized, with each component having its own file and a clear separation of concerns."
       ],
       "improvements": [
-        "In the `TaskCard` component, the `textStyle` object can be extracted into a separate constant or a utility function to make the code more readable.",
-        "In the `TaskList` component, the `list` variable can be renamed to something more descriptive, such as `tasks` or `renderedTasks`.",
-        "In the `TaskApp` component, the `handleToggle` function can be extracted into a separate function to make the code more modular and easier to test."
+        "In the `TaskCard` component, the `textStyle` object can be extracted into a separate constant to make the code more readable.",
+        "In the `TaskList` component, the `completedCount` variable can be extracted into a separate function to make the code more reusable.",
+        "The `onToggle` function in the `TaskList` component can be simplified by using the `map` function to create a new array with the updated `completed` property."
       ],
       "readability": 85,
       "maintainability": 90,
-      "overall": "The code is well-structured, maintainable, and follows best practices. However, there are a few minor improvements that can be made to make the code even more readable and maintainable."
+      "overall": "The code is well-structured, maintainable, and efficient. However, there are a few areas for improvement to make the code even more readable and efficient. With some minor adjustments, the code can be considered excellent."
     }
   }
 ]

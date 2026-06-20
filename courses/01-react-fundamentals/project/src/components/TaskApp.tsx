@@ -7,7 +7,7 @@ interface TaskAppProps {
   tasks?: Task[];
   setTasks?: (tasks: Task[]) => void;
   showForm?: boolean;
-  countFormat?: string;
+  
 }
 
 const INITIAL_TASKS: Task[] = [
@@ -18,7 +18,7 @@ const INITIAL_TASKS: Task[] = [
   { id: 5, title: 'Fifth Task', description: 'Desc 5', priority: 'Medium', completed: false },
 ];
 
-export default function TaskApp({ tasks = [], setTasks, showForm, countFormat }: TaskAppProps) {
+export default function TaskApp({ tasks = [], setTasks, showForm,  }: TaskAppProps) {
   
 
 
@@ -40,23 +40,15 @@ export default function TaskApp({ tasks = [], setTasks, showForm, countFormat }:
   
   const handleToggle = (id: number) => {
     if (setTasks) {
-      const updatedTasks = tasks.map(t => 
+      setTasks(tasks.map(t => 
         t.id === id ? { ...t, completed: !t.completed } : t
-      );
-      setTasks(updatedTasks);
+      ));
     }
   };
 
-  
-  const completedCount = tasks.filter(t => t.completed).length;
-  
-  const countText = countFormat === 'completed' 
-    ? `${completedCount} of ${tasks.length} completed` 
-    : `${tasks.length} Tasks`;
 
   return (
     <div>
-      <div id="task-count">{countText}</div>
       {showForm && <TaskForm onAddTask={handleAddTask} />}
       <TaskList tasks={tasks} onToggle={handleToggle} />
     </div>

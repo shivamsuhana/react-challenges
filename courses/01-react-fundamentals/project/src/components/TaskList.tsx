@@ -15,26 +15,34 @@ interface TaskListProps {
   onToggle?: (id: number) => void;
 }
 
-// justfor fallback case
-const HARDCODED_TASKS: Task[] = [
-  { id: 1, title: 'Task One', description: 'First hardcoded task', priority: 'High', completed: false },
-  { id: 2, title: 'Task Two', description: 'Second hardcoded task', priority: 'Medium', completed: false },
-  { id: 3, title: 'Task Three', description: 'Third hardcoded task', priority: 'Low', completed: false },
-];
+// // justfor fallback case
+// const HARDCODED_TASKS: Task[] = [
+//   { id: 1, title: 'Task One', description: 'First hardcoded task', priority: 'High', completed: false },
+//   { id: 2, title: 'Task Two', description: 'Second hardcoded task', priority: 'Medium', completed: false },
+//   { id: 3, title: 'Task Three', description: 'Third hardcoded task', priority: 'Low', completed: false },
+// ];
 
 export default function TaskList({ tasks, onToggle }: TaskListProps) {
-  const list = tasks ?? HARDCODED_TASKS;
+const completedCount = tasks.filter(t => t.completed).length;
 
   return (
+
+
     <div>
-      {list.map((task) => (
+
+      <div id="task-count">
+        {completedCount} of {tasks.length} completed
+      </div>
+
+
+      {tasks.map((task) => (
         <TaskCard 
           key={task.id} 
           title={task.title} 
           description={task.description} 
           priority={task.priority}
-          completed={task.completed}
-          onToggle={() => onToggle?.(task.id)} 
+          completed={task.completed} 
+          onToggle={onToggle ? () => onToggle(task.id) : undefined} 
         />
       ))}
     </div>
