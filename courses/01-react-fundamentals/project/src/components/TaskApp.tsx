@@ -21,9 +21,29 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
   const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
   
+  const [isInitialized, setIsInitialized] = useState(false);
+  
   useEffect(() => {
-    if (tasks.length === 0 && setTasks) setTasks(INITIAL_TASKS);
+    if (setTasks) {
+      try {
+        const savedData = localStorage.getItem('task-app-tasks');
+        if (savedData) {
+          setTasks(JSON.parse(savedData));
+        } else {
+          setTasks(INITIAL_TASKS);
+        }
+      } catch (error) {
+        setTasks(INITIAL_TASKS);
+      }
+      setIsInitialized(true);
+    }
   }, []); 
+
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem('task-app-tasks', JSON.stringify(tasks));
+    }
+  }, [tasks, isInitialized]);
 
   const handleAddTask = (newTask: Task) => {
     if (setTasks) setTasks([...tasks, newTask]);
@@ -55,6 +75,7 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
   });
 
   const priorityWeight = { High: 3, Medium: 2, Low: 1 };
+  
   const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return priorityWeight[b.priority] - priorityWeight[a.priority];
     if (sort === 'priority-low-high') return priorityWeight[a.priority] - priorityWeight[b.priority];
