@@ -1,9 +1,7 @@
-
-
 import TaskCard from './TaskCard';
 
 export interface Task {
-  id: number ;
+  id: number;
   title: string;
   description: string;
   priority: 'Low' | 'Medium' | 'High';
@@ -15,45 +13,45 @@ interface TaskListProps {
   onToggle?: (id: number) => void;
   onDelete?: (id: number) => void;
   totalTasksCount?: number;
+  editingId?: number | null;
+  setEditingId?: (id: number | null) => void;
+  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High' }) => void;
 }
 
-// // justfor fallback case
-// const HARDCODED_TASKS: Task[] = [
-//   { id: 1, title: 'Task One', description: 'First hardcoded task', priority: 'High', completed: false },
-//   { id: 2, title: 'Task Two', description: 'Second hardcoded task', priority: 'Medium', completed: false },
-//   { id: 3, title: 'Task Three', description: 'Third hardcoded task', priority: 'Low', completed: false },
-// ];
-
-export default function TaskList({ tasks, onToggle, onDelete, totalTasksCount }: TaskListProps) {
-const total = totalTasksCount !== undefined ? totalTasksCount : tasks.length;
+export default function TaskList({ 
+  tasks, onToggle, onDelete, totalTasksCount, 
+  editingId, setEditingId, onUpdateTask 
+}: TaskListProps) {
+  const total = totalTasksCount !== undefined ? totalTasksCount : tasks.length;
 
   return (
-
-
     <div>
-
       <div id="task-count">
-      {tasks.length} of {total} tasks
+        Showing {tasks.length} of {total} tasks
       </div>
 
-
-      {tasks.length === 0 ? (
-        <div id="filter-empty-message">No tasks match this filter</div>
-      )
-
-: (
-        tasks.map((task) => (
-          <TaskCard 
-            key={task.id} 
-            title={task.title} 
-            description={task.description} 
-            priority={task.priority}
-            completed={task.completed} 
-            onToggle={onToggle ? () => onToggle(task.id) : undefined} 
-            onDelete={onDelete ? () => onDelete(task.id) : undefined}
-          />
-        ))
-      )}
+      <div id="task-list">
+        {tasks.length === 0 ? (
+          <div id="filter-empty-message">No tasks match this filter</div>
+        ) : (
+          tasks.map((task) => (
+            <TaskCard 
+              key={task.id} 
+              id={task.id}
+              title={task.title} 
+              description={task.description} 
+              priority={task.priority}
+              completed={task.completed} 
+              onToggle={onToggle ? () => onToggle(task.id) : undefined} 
+              onDelete={onDelete ? () => onDelete(task.id) : undefined}
+              isEditing={editingId === task.id}
+              onEditStart={setEditingId ? () => setEditingId(task.id) : undefined}
+              onEditCancel={setEditingId ? () => setEditingId(null) : undefined}
+              onUpdateTask={onUpdateTask} 
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }
