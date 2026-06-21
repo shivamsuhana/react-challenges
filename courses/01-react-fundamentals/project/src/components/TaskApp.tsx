@@ -11,32 +11,43 @@ interface TaskAppProps {
 }
 
 const INITIAL_TASKS: Task[] = [
-  { id: 1, title: 'First Task', description: 'Desc 1', priority: 'High', completed: false },
-  { id: 2, title: 'Second Task', description: 'Desc 2', priority: 'Medium', completed: false },
+  { id: 1, title: 'First Task', description: 'Desc 1', priority: 'High', completed: false, category: 'Work', tags: ['urgent'] },
+  { id: 2, title: 'Second Task', description: 'Desc 2', priority: 'Medium', completed: false, category: 'Personal', tags: ['hobby'] },
 ];
 
 export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar }: TaskAppProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const [sort, setSort] = useState<SortType>('recently-added');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // STRICT ADDITION: Debounce architecture states
-  const [searchQuery, setSearchQuery] = useState(''); // Immediate raw input
-  const [debouncedQuery, setDebouncedQuery] = useState(''); // Delayed execution input
-  const [isSearching, setIsSearching] = useState(false); // Indicator flag
+  const [searchQuery, setSearchQuery] = useState(''); 
+  const [debouncedQuery, setDebouncedQuery] = useState(''); 
+  const [isSearching, setIsSearching] = useState(false); 
 
   useEffect(() => {
     if (setTasks) {
       try {
         const savedData = localStorage.getItem('task-app-tasks');
-        if (savedData) setTasks(JSON.parse(savedData));
-        else setTasks(INITIAL_TASKS);
+        if (savedData) {
+          const parsed: Task[] = JSON.parse(savedData);
+          
+          const migration = parsed.map(t => ({
+            ...t,
+            category: t.category || 'General',
+            tags: t.tags || []
+          }));
+          setTasks(migration);
+        } else {
+          setTasks(INITIAL_TASKS);
+        }
       } catch (error) {
         setTasks(INITIAL_TASKS);
       }
       setIsInitialized(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 
 
   useEffect(() => {
@@ -45,16 +56,12 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
     }
   }, [tasks, isInitialized]);
 
-  
   useEffect(() => {
     setIsSearching(true);
-    
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery);
       setIsSearching(false);
     }, 300);
-
-    // Agar 300ms se pehle naya keystroke aaya toh purana timer destroy hoga
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
@@ -70,25 +77,37 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
     if (setTasks) setTasks(tasks.filter(t => t.id !== id));
   };
 
-  const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High' }) => {
+  const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[] }) => {
     if (setTasks) setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));
     setEditingId(null);
   };
 
-  const filteredTasks = tasks.filter(t => {
+  
+  const uniqueCategories = Array.from(
+    new Set(tasks.map(t => t.category).filter(Boolean))
+  );
+//status filkter
+  const statusFiltered = tasks.filter(t => {
     if (filter === 'active') return !t.completed;
     if (filter === 'completed') return t.completed;
     return true; 
   });
 
-  const searchedTasks = filteredTasks.filter(t => {
+  // Category filter
+  const categoryFiltered = statusFiltered.filter(t => {
+    if (selectedCategory === 'all') return true;
+    return t.category === selectedCategory;
+  });
+
+  //  Search filter
+  const searchedTasks = categoryFiltered.filter(t => {
     if (!debouncedQuery.trim()) return true;
     const lowerQuery = debouncedQuery.toLowerCase();
     return t.title.toLowerCase().includes(lowerQuery) || t.description.toLowerCase().includes(lowerQuery);
   });
 
+  // Sort
   const priorityWeight = { High: 3, Medium: 2, Low: 1 };
-  
   const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return priorityWeight[b.priority] - priorityWeight[a.priority];
     if (sort === 'priority-low-high') return priorityWeight[a.priority] - priorityWeight[b.priority];
@@ -106,7 +125,10 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
           onSortChange={setSort}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          isSearching={isSearching} 
+          isSearching={isSearching}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          categories={uniqueCategories}
         />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}

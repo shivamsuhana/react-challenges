@@ -8,20 +8,35 @@ interface FilterBarProps {
   onSortChange?: (sort: SortType) => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
-  isSearching?: boolean; 
+  isSearching?: boolean;
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
+  categories?: string[];
 }
 
 export default function FilterBar({ 
-  filter, onFilterChange, 
-  sort = 'recently-added', onSortChange,
-  searchQuery = '', onSearchChange,
-  isSearching = false
+  filter, onFilterChange, sort = 'recently-added', onSortChange,
+  searchQuery = '', onSearchChange, isSearching = false,
+  selectedCategory = 'all', onCategoryChange, categories = []
 }: FilterBarProps) {
   return (
     <div id="filter-bar">
       <button data-active={filter === 'all'} onClick={() => onFilterChange('all')}>All</button>
       <button data-active={filter === 'active'} onClick={() => onFilterChange('active')}>Active</button>
       <button data-active={filter === 'completed'} onClick={() => onFilterChange('completed')}>Completed</button>
+
+      {onCategoryChange && (
+        <select 
+          id="category-filter" 
+          value={selectedCategory} 
+          onChange={(e) => onCategoryChange(e.target.value)}
+        >
+          <option value="all">All categories</option>
+          {categories.map((cat, index) => (
+            <option key={index} value={cat}>{cat}</option>
+          ))}
+        </select>
+      )}
 
       {onSortChange && (
         <select id="sort-order" value={sort} onChange={(e) => onSortChange(e.target.value as SortType)}>
@@ -42,11 +57,8 @@ export default function FilterBar({
             onChange={(e) => onSearchChange(e.target.value)}
           />
           {isSearching && <span id="searching-indicator">Searching...</span>}
-          
           {searchQuery.length > 0 && (
-            <button id="clear-search" onClick={() => onSearchChange('')}>
-              Clear search
-            </button>
+            <button id="clear-search" onClick={() => onSearchChange('')}>Clear search</button>
           )}
         </div>
       )}

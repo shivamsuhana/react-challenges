@@ -6,6 +6,8 @@ export interface Task {
   description: string;
   priority: 'Low' | 'Medium' | 'High';
   completed: boolean;
+  category: string; 
+  tags: string[];   
 }
 
 interface TaskListProps {
@@ -15,7 +17,7 @@ interface TaskListProps {
   totalTasksCount?: number;
   editingId?: number | null;
   setEditingId?: (id: number | null) => void;
-  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High' }) => void;
+  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[] }) => void;
 }
 
 export default function TaskList({ 
@@ -42,6 +44,8 @@ export default function TaskList({
               description={task.description} 
               priority={task.priority}
               completed={task.completed} 
+              category={task.category}
+              tags={task.tags}
               onToggle={onToggle ? () => onToggle(task.id) : undefined} 
               onDelete={onDelete ? () => onDelete(task.id) : undefined}
               isEditing={editingId === task.id}

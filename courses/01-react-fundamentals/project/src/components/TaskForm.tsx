@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { Task } from './TaskList';
 
 interface TaskFormProps {
@@ -6,68 +6,52 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ onAddTask }: TaskFormProps) {
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>('Medium');
-  const [error, setError] = useState('');
+  const [category, setCategory] = useState('General');
+  const [tagsInput, setTagsInput] = useState('');
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault(); 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (title.trim() === '') return;
 
-   
-    if (title.trim() === '') {
-      setError('Title is required');
-      return;
-    }
+    const parsedTags = tagsInput
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
 
-   
     const newTask: Task = {
-      id: Date.now(), 
+      id: Date.now(),
       title: title.trim(),
       description: description.trim(),
-      priority: priority,
+      priority,
       completed: false,
+      category: category.trim() || 'General',
+      tags: parsedTags
     };
 
-   
     onAddTask(newTask);
-
-   
+    
+    // Reset states
     setTitle('');
     setDescription('');
     setPriority('Medium');
-    setError('');
+    setCategory('General');
+    setTagsInput('');
   };
 
   return (
-    <form onSubmit={handleSubmit} id="task-form">
-   
-      {error && <div id="task-form-error">{error}</div>}
-      
-      <input
-        id="task-title"
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Task Title"
-      />
-      
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-      />
-      
-      <select 
-        value={priority} 
-        onChange={(e) => setPriority(e.target.value as 'Low' | 'Medium' | 'High')}
-      >
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
+    <form onSubmit={handleSubmit} className="task-form">
+      <input type="text" placeholder="Task Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <select value={priority} onChange={(e) => setPriority(e.target.value as 'Low' | 'Medium' | 'High')}>
         <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
       </select>
-      
+      <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} />
+      <input type="text" placeholder="Tags (comma separated)" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} />
       <button type="submit">Add Task</button>
     </form>
   );
