@@ -1,12 +1,14 @@
 
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import TaskList, { Task } from './TaskList';
 import TaskForm from './TaskForm';
+import FilterBar, { FilterType } from './FilterBar';
 
 interface TaskAppProps {
   tasks?: Task[];
   setTasks?: (tasks: Task[]) => void;
   showForm?: boolean;
+  showFilterBar?: boolean;
   
 }
 
@@ -18,7 +20,9 @@ const INITIAL_TASKS: Task[] = [
   { id: 5, title: 'Fifth Task', description: 'Desc 5', priority: 'Medium', completed: false },
 ];
 
-export default function TaskApp({ tasks = [], setTasks, showForm,  }: TaskAppProps) {
+export default function TaskApp({ tasks = [], setTasks, showForm,showFilterBar  }: TaskAppProps) {
+
+  const [filter, setFilter] = useState<FilterType>('all');
   
 
 
@@ -52,12 +56,24 @@ export default function TaskApp({ tasks = [], setTasks, showForm,  }: TaskAppPro
     }
   };
 
+  const filteredTasks = tasks.filter(t => {
+    if (filter === 'active') return !t.completed;
+    if (filter === 'completed') return t.completed;
+    return true; // 'all' ke case mein pura array pass hoga
+  });
+
 
   return (
     <div>
+      {showFilterBar && (
+        <FilterBar filter={filter} onFilterChange={setFilter} />
+      )}
+
       {showForm && <TaskForm onAddTask={handleAddTask} />}
+
       <TaskList 
-      tasks={tasks} 
+      tasks={filteredTasks} 
+      totalTasksCount={tasks.length}
       onToggle={handleToggle}
       onDelete={handleDelete} />
     </div>

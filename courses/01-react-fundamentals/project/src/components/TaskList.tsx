@@ -14,6 +14,7 @@ interface TaskListProps {
   tasks: Task[];
   onToggle?: (id: number) => void;
   onDelete?: (id: number) => void;
+  totalTasksCount?: number;
 }
 
 // // justfor fallback case
@@ -23,8 +24,8 @@ interface TaskListProps {
 //   { id: 3, title: 'Task Three', description: 'Third hardcoded task', priority: 'Low', completed: false },
 // ];
 
-export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
-const completedCount = tasks.filter(t => t.completed).length;
+export default function TaskList({ tasks, onToggle, onDelete, totalTasksCount }: TaskListProps) {
+const total = totalTasksCount !== undefined ? totalTasksCount : tasks.length;
 
   return (
 
@@ -32,21 +33,27 @@ const completedCount = tasks.filter(t => t.completed).length;
     <div>
 
       <div id="task-count">
-        {completedCount} of {tasks.length} completed
+        Showing {tasks.length} of {total} tasks
       </div>
 
 
-      {tasks.map((task) => (
-        <TaskCard 
-          key={task.id} 
-          title={task.title} 
-          description={task.description} 
-          priority={task.priority}
-          completed={task.completed} 
-          onToggle={onToggle ? () => onToggle(task.id) : undefined} 
-          onDelete={onDelete ? () => onDelete(task.id) : undefined}
-        />
-      ))}
+      {tasks.length === 0 ? (
+        <div id="filter-empty-message">No tasks match this filter</div>
+      )
+
+: (
+        tasks.map((task) => (
+          <TaskCard 
+            key={task.id} 
+            title={task.title} 
+            description={task.description} 
+            priority={task.priority}
+            completed={task.completed} 
+            onToggle={onToggle ? () => onToggle(task.id) : undefined} 
+            onDelete={onDelete ? () => onDelete(task.id) : undefined}
+          />
+        ))
+      )}
     </div>
   );
 }
