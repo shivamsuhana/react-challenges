@@ -32,7 +32,7 @@ export default function TaskList({
 
       <div id="task-list">
         {tasks.length === 0 ? (
-          <div id="filter-empty-message">No tasks match this filter</div>
+          <div id="filter-empty-message">No tasks found</div>
         ) : (
           tasks.map((task) => (
             <TaskCard 

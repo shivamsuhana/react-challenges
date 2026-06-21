@@ -18,11 +18,12 @@ const INITIAL_TASKS: Task[] = [
 export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar }: TaskAppProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const [sort, setSort] = useState<SortType>('recently-added');
+  const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
   
   useEffect(() => {
     if (tasks.length === 0 && setTasks) setTasks(INITIAL_TASKS);
-  }, [tasks.length, setTasks]); 
+  }, []); 
 
   const handleAddTask = (newTask: Task) => {
     if (setTasks) setTasks([...tasks, newTask]);
@@ -37,9 +38,7 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
   };
 
   const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High' }) => {
-    if (setTasks) {
-      setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));
-    }
+    if (setTasks) setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));
     setEditingId(null);
   };
 
@@ -49,9 +48,14 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
     return true; 
   });
 
-  const priorityWeight = { High: 3, Medium: 2, Low: 1 };
+  const searchedTasks = filteredTasks.filter(t => {
+    if (!searchQuery.trim()) return true;
+    const lowerQuery = searchQuery.toLowerCase();
+    return t.title.toLowerCase().includes(lowerQuery) || t.description.toLowerCase().includes(lowerQuery);
+  });
 
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
+  const priorityWeight = { High: 3, Medium: 2, Low: 1 };
+  const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return priorityWeight[b.priority] - priorityWeight[a.priority];
     if (sort === 'priority-low-high') return priorityWeight[a.priority] - priorityWeight[b.priority];
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
@@ -66,6 +70,8 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
           onFilterChange={setFilter} 
           sort={sort}
           onSortChange={setSort}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}

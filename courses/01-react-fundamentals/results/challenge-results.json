@@ -4000,5 +4000,467 @@
       "maintainability": 80,
       "overall": "The code is well-structured and maintainable, but could benefit from some improvements to make it even more readable and efficient. With some refactoring and additional comments, the code could be even more robust and easier to understand."
     }
+  },
+  {
+    "challengeId": "09-search-functionality",
+    "challengeName": "Search Functionality",
+    "timestamp": "2026-06-21T06:18:41.540Z",
+    "scores": {
+      "functionalTests": 100,
+      "codeQuality": 98,
+      "architecture": 100,
+      "bestPractices": 100,
+      "e2eTests": 50,
+      "aiReview": 88
+    },
+    "totalScore": 90.4,
+    "passed": true,
+    "errors": [],
+    "warnings": [],
+    "testResults": {
+      "score": 100,
+      "passed": true,
+      "totalTests": 2,
+      "passedTests": 2,
+      "failedTests": 0,
+      "details": [
+        {
+          "assertionResults": [
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 09: Search Functionality"
+              ],
+              "fullName": " Challenge 09: Search Functionality FilterBar should exist for search integration",
+              "status": "passed",
+              "title": "FilterBar should exist for search integration",
+              "duration": 7,
+              "failureMessages": []
+            },
+            {
+              "ancestorTitles": [
+                "",
+                "Challenge 09: Search Functionality"
+              ],
+              "fullName": " Challenge 09: Search Functionality TaskList should filter by provided tasks (search applied upstream)",
+              "status": "passed",
+              "title": "TaskList should filter by provided tasks (search applied upstream)",
+              "duration": 6,
+              "failureMessages": []
+            }
+          ],
+          "startTime": 1782022722454,
+          "endTime": 1782022722467,
+          "status": "passed",
+          "message": "",
+          "name": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/challenge-09.test.tsx"
+        }
+      ]
+    },
+    "lintResults": {
+      "score": 98,
+      "passed": true,
+      "totalIssues": 1,
+      "errors": 0,
+      "warnings": 1,
+      "details": [
+        {
+          "filePath": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/src/App.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/src/components/FilterBar.tsx",
+          "messages": [],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 0,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        },
+        {
+          "filePath": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/src/components/TaskApp.tsx",
+          "messages": [
+            {
+              "ruleId": "react-hooks/exhaustive-deps",
+              "severity": 1,
+              "message": "React Hook useEffect has missing dependencies: 'setTasks' and 'tasks.length'. Either include them or remove the dependency array. If 'setTasks' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+              "line": 26,
+              "column": 6,
+              "nodeType": "ArrayExpression",
+              "endLine": 26,
+              "endColumn": 8,
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [setTasks, tasks.length]",
+                  "fix": {
+                    "range": [
+                      984,
+                      986
+                    ],
+                    "text": "[setTasks, tasks.length]"
+                  }
+                }
+              ]
+            }
+          ],
+          "suppressedMessages": [],
+          "errorCount": 0,
+          "fatalErrorCount": 0,
+          "warningCount": 1,
+          "fixableErrorCount": 0,
+          "fixableWarningCount": 0,
+          "source": "import { useEffect, useState } from 'react';\nimport TaskList, { Task } from './TaskList';\nimport TaskForm from './TaskForm'; \nimport FilterBar, { FilterType, SortType } from './FilterBar';\n\ninterface TaskAppProps {\n  tasks?: Task[];\n  setTasks?: (tasks: Task[]) => void;\n  showForm?: boolean;\n  showFilterBar?: boolean;\n}\n\nconst INITIAL_TASKS: Task[] = [\n  { id: 1, title: 'First Task', description: 'Desc 1', priority: 'High', completed: false },\n  { id: 2, title: 'Second Task', description: 'Desc 2', priority: 'Medium', completed: false },\n];\n\nexport default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar }: TaskAppProps) {\n  const [filter, setFilter] = useState<FilterType>('all');\n  const [sort, setSort] = useState<SortType>('recently-added');\n  const [searchQuery, setSearchQuery] = useState('');\n  const [editingId, setEditingId] = useState<number | null>(null);\n  \n  useEffect(() => {\n    if (tasks.length === 0 && setTasks) setTasks(INITIAL_TASKS);\n  }, []); \n\n  const handleAddTask = (newTask: Task) => {\n    if (setTasks) setTasks([...tasks, newTask]);\n  };\n\n  const handleToggle = (id: number) => {\n    if (setTasks) setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));\n  };\n\n  const handleDelete = (id: number) => {\n    if (setTasks) setTasks(tasks.filter(t => t.id !== id));\n  };\n\n  const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High' }) => {\n    if (setTasks) setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));\n    setEditingId(null);\n  };\n\n  const filteredTasks = tasks.filter(t => {\n    if (filter === 'active') return !t.completed;\n    if (filter === 'completed') return t.completed;\n    return true; \n  });\n\n  const searchedTasks = filteredTasks.filter(t => {\n    if (!searchQuery.trim()) return true;\n    const lowerQuery = searchQuery.toLowerCase();\n    return t.title.toLowerCase().includes(lowerQuery) || t.description.toLowerCase().includes(lowerQuery);\n  });\n\n  const priorityWeight = { High: 3, Medium: 2, Low: 1 };\n  const sortedTasks = [...searchedTasks].sort((a, b) => {\n    if (sort === 'priority-high-low') return priorityWeight[b.priority] - priorityWeight[a.priority];\n    if (sort === 'priority-low-high') return priorityWeight[a.priority] - priorityWeight[b.priority];\n    if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase());\n    return 0;\n  });\n\n  return (\n    <div>\n      {showFilterBar && (\n        <FilterBar \n          filter={filter} \n          onFilterChange={setFilter} \n          sort={sort}\n          onSortChange={setSort}\n          searchQuery={searchQuery}\n          onSearchChange={setSearchQuery}\n        />\n      )}\n      {showForm && <TaskForm onAddTask={handleAddTask} />}\n      <TaskList \n        tasks={sortedTasks} \n        totalTasksCount={tasks.length} \n        onToggle={handleToggle} \n        onDelete={handleDelete} \n        editingId={editingId}\n        setEditingId={setEditingId}\n        onUpdateTask={handleUpdateTask}\n      />\n    </div>\n  );\n}",
+          "usedDeprecatedRules": [
+            {
+              "ruleId": "no-extra-semi",
+              "replacedBy": []
+            },
+            {
+              "ruleId": "no-mixed-spaces-and-tabs",
+              "replacedBy": []
+            }
+          ]
+        }
+      ]
+    },
+    "architectureResults": {
+      "score": 100,
+      "passed": true,
+      "patternsFound": [
+        "functionalComponent",
+        "props"
+      ],
+      "patternsMissing": [],
+      "details": [
+        {
+          "file": "src/components/FilterBar.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "props"
+          ],
+          "patternsMissing": []
+        },
+        {
+          "file": "src/components/TaskApp.tsx",
+          "patternsFound": [
+            "functionalComponent",
+            "props"
+          ],
+          "patternsMissing": []
+        },
+        {
+          "file": "src/App.tsx",
+          "patternsFound": [
+            "functionalComponent"
+          ],
+          "patternsMissing": [
+            "props"
+          ]
+        }
+      ]
+    },
+    "bestPracticesResults": {
+      "score": 100,
+      "passed": true,
+      "issues": [],
+      "details": [],
+      "note": "No best practices requirements specified in challenge"
+    },
+    "e2eResults": {
+      "score": 50,
+      "totalTests": 2,
+      "passedTests": 1,
+      "failedTests": 1,
+      "details": [
+        {
+          "title": "challenge-09.spec.ts",
+          "file": "challenge-09.spec.ts",
+          "column": 0,
+          "line": 0,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Challenge 09: Search Functionality - E2E",
+              "file": "challenge-09.spec.ts",
+              "line": 3,
+              "column": 6,
+              "specs": [
+                {
+                  "title": "should display task list",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 296,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-21T06:18:45.038Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "a1b04685a79f6082459c-9d86016f102d681b21f1",
+                  "file": "challenge-09.spec.ts",
+                  "line": 8,
+                  "column": 3
+                },
+                {
+                  "title": "should display filter bar or search area",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 117,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81",
+                            "location": {
+                              "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                              "column": 81,
+                              "line": 13
+                            },
+                            "snippet": "\u001b[0m \u001b[90m 11 |\u001b[39m\n \u001b[90m 12 |\u001b[39m   test(\u001b[32m'should display filter bar or search area'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#filter-bar'\u001b[39m)\u001b[33m.\u001b[39mor(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#search-input'\u001b[39m)))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 14 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 16 |\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                                "column": 81,
+                                "line": 13
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n\n  11 |\n  12 |   test('should display filter bar or search area', async ({ page }) => {\n> 13 |     await expect(page.locator('#filter-bar').or(page.locator('#search-input'))).toBeVisible();\n     |                                                                                 ^\n  14 |   });\n  15 | });\n  16 |\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-06-21T06:18:45.683Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                            "column": 81,
+                            "line": 13
+                          }
+                        },
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 151,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81",
+                            "location": {
+                              "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                              "column": 81,
+                              "line": 13
+                            },
+                            "snippet": "\u001b[0m \u001b[90m 11 |\u001b[39m\n \u001b[90m 12 |\u001b[39m   test(\u001b[32m'should display filter bar or search area'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#filter-bar'\u001b[39m)\u001b[33m.\u001b[39mor(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#search-input'\u001b[39m)))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 14 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 16 |\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                                "column": 81,
+                                "line": 13
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n\n  11 |\n  12 |   test('should display filter bar or search area', async ({ page }) => {\n> 13 |     await expect(page.locator('#filter-bar').or(page.locator('#search-input'))).toBeVisible();\n     |                                                                                 ^\n  14 |   });\n  15 | });\n  16 |\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 1,
+                          "startTime": "2026-06-21T06:18:46.209Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium-retry1/test-failed-1.png"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium-retry1/error-context.md"
+                            },
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium-retry1/trace.zip"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                            "column": 81,
+                            "line": 13
+                          }
+                        },
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 126,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81",
+                            "location": {
+                              "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                              "column": 81,
+                              "line": 13
+                            },
+                            "snippet": "\u001b[0m \u001b[90m 11 |\u001b[39m\n \u001b[90m 12 |\u001b[39m   test(\u001b[32m'should display filter bar or search area'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#filter-bar'\u001b[39m)\u001b[33m.\u001b[39mor(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#search-input'\u001b[39m)))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 14 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 16 |\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                                "column": 81,
+                                "line": 13
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#filter-bar').or(locator('#search-input'))\nExpected: visible\nError: strict mode violation: locator('#filter-bar').or(locator('#search-input')) resolved to 2 elements:\n    1) <div id=\"filter-bar\">…</div> aka getByText('AllActiveCompletedRecently')\n    2) <input value=\"\" type=\"text\" id=\"search-input\" placeholder=\"Search tasks...\"/> aka getByRole('textbox', { name: 'Search tasks...' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#filter-bar').or(locator('#search-input'))\u001b[22m\n\n\n  11 |\n  12 |   test('should display filter bar or search area', async ({ page }) => {\n> 13 |     await expect(page.locator('#filter-bar').or(page.locator('#search-input'))).toBeVisible();\n     |                                                                                 ^\n  14 |   });\n  15 | });\n  16 |\n    at /Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts:13:81"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 2,
+                          "startTime": "2026-06-21T06:18:46.868Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium-retry2/test-failed-1.png"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/test-results/challenge-09-Challenge-09--46cbd-y-filter-bar-or-search-area-chromium-retry2/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/Users/krishu/IdeaProjects/challenge-engine-react/courses/01-react-fundamentals/project/tests/e2e/challenge-09.spec.ts",
+                            "column": 81,
+                            "line": 13
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "a1b04685a79f6082459c-f7f96fde2c0088dc54d3",
+                  "file": "challenge-09.spec.ts",
+                  "line": 12,
+                  "column": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "error": "Exit 1",
+      "passed": false
+    },
+    "aiReviewResults": {
+      "challengeId": "09-search-functionality",
+      "timestamp": "2026-06-21T06:18:47.138Z",
+      "score": 88,
+      "feedback": [],
+      "strengths": [
+        "The code is well-structured and follows a consistent naming convention.",
+        "The use of TypeScript and functional components makes the code more maintainable and easier to understand.",
+        "The separation of concerns between the FilterBar and TaskApp components makes the code more modular and easier to test."
+      ],
+      "improvements": [
+        "The FilterBar component has a lot of props that are not being used in the TaskApp component. Consider removing these props to make the code more concise.",
+        "The search functionality in the TaskApp component could be improved by using a more efficient algorithm, such as using a Trie data structure.",
+        "The code could benefit from more comments and documentation to make it easier for others to understand the functionality and implementation details."
+      ],
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The code is well-structured and maintainable, but there are some areas that could be improved for better performance and readability. With some additional comments and documentation, the code would be even more maintainable and easier to understand."
+    },
+    "aiResults": {
+      "challengeId": "09-search-functionality",
+      "timestamp": "2026-06-21T06:18:47.138Z",
+      "score": 88,
+      "feedback": [],
+      "strengths": [
+        "The code is well-structured and follows a consistent naming convention.",
+        "The use of TypeScript and functional components makes the code more maintainable and easier to understand.",
+        "The separation of concerns between the FilterBar and TaskApp components makes the code more modular and easier to test."
+      ],
+      "improvements": [
+        "The FilterBar component has a lot of props that are not being used in the TaskApp component. Consider removing these props to make the code more concise.",
+        "The search functionality in the TaskApp component could be improved by using a more efficient algorithm, such as using a Trie data structure.",
+        "The code could benefit from more comments and documentation to make it easier for others to understand the functionality and implementation details."
+      ],
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The code is well-structured and maintainable, but there are some areas that could be improved for better performance and readability. With some additional comments and documentation, the code would be even more maintainable and easier to understand."
+    }
   }
 ]
