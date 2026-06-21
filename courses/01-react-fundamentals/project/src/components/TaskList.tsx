@@ -33,7 +33,7 @@ const total = totalTasksCount !== undefined ? totalTasksCount : tasks.length;
     <div>
 
       <div id="task-count">
-        Showing {tasks.length} of {total} tasks
+      {tasks.length} of {total} tasks
       </div>
 
 
