@@ -8,12 +8,14 @@ interface FilterBarProps {
   onSortChange?: (sort: SortType) => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
+  isSearching?: boolean; 
 }
 
 export default function FilterBar({ 
   filter, onFilterChange, 
   sort = 'recently-added', onSortChange,
-  searchQuery = '', onSearchChange
+  searchQuery = '', onSearchChange,
+  isSearching = false
 }: FilterBarProps) {
   return (
     <div id="filter-bar">
@@ -39,6 +41,8 @@ export default function FilterBar({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />
+          {isSearching && <span id="searching-indicator">Searching...</span>}
+          
           {searchQuery.length > 0 && (
             <button id="clear-search" onClick={() => onSearchChange('')}>
               Clear search

@@ -228,5 +228,28 @@
       "maintainability": 80,
       "overall": "The code is well-structured and maintainable, but requires some improvements to handle edge cases and add more robust error handling. With some tweaks, it can be a solid solution for persisting tasks across page refreshes using useEffect and local storage."
     }
+  },
+  {
+    "challengeId": "11-useeffect-debounced-search",
+    "challengeName": "useEffect - Debounced Search",
+    "aiReview": {
+      "challengeId": "11-useeffect-debounced-search",
+      "timestamp": "2026-06-21T08:40:18.031Z",
+      "score": 88,
+      "feedback": [],
+      "strengths": [
+        "The code is well-organized and follows a consistent structure.",
+        "The use of TypeScript and functional components is a good practice.",
+        "The code includes a clear and concise README with instructions and requirements."
+      ],
+      "improvements": [
+        "The `useEffect` hook in `TaskApp.tsx` has multiple dependencies, which can lead to performance issues. Consider using the `useCallback` hook to memoize the effect function.",
+        "The `debouncedQuery` state is not necessary. Consider using the `searchQuery` state directly in the filtering logic.",
+        "The `isSearching` state is not used consistently throughout the code. Consider removing it or using it more consistently."
+      ],
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The code is well-structured and follows good practices, but there are some areas for improvement to enhance performance and maintainability."
+    }
   }
 ]

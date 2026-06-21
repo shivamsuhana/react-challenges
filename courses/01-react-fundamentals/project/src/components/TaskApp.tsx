@@ -18,20 +18,20 @@ const INITIAL_TASKS: Task[] = [
 export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar }: TaskAppProps) {
   const [filter, setFilter] = useState<FilterType>('all');
   const [sort, setSort] = useState<SortType>('recently-added');
-  const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
-  
   const [isInitialized, setIsInitialized] = useState(false);
-  
+
+  // STRICT ADDITION: Debounce architecture states
+  const [searchQuery, setSearchQuery] = useState(''); // Immediate raw input
+  const [debouncedQuery, setDebouncedQuery] = useState(''); // Delayed execution input
+  const [isSearching, setIsSearching] = useState(false); // Indicator flag
+
   useEffect(() => {
     if (setTasks) {
       try {
         const savedData = localStorage.getItem('task-app-tasks');
-        if (savedData) {
-          setTasks(JSON.parse(savedData));
-        } else {
-          setTasks(INITIAL_TASKS);
-        }
+        if (savedData) setTasks(JSON.parse(savedData));
+        else setTasks(INITIAL_TASKS);
       } catch (error) {
         setTasks(INITIAL_TASKS);
       }
@@ -44,6 +44,19 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
       localStorage.setItem('task-app-tasks', JSON.stringify(tasks));
     }
   }, [tasks, isInitialized]);
+
+  
+  useEffect(() => {
+    setIsSearching(true);
+    
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+      setIsSearching(false);
+    }, 300);
+
+    // Agar 300ms se pehle naya keystroke aaya toh purana timer destroy hoga
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleAddTask = (newTask: Task) => {
     if (setTasks) setTasks([...tasks, newTask]);
@@ -69,8 +82,8 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
   });
 
   const searchedTasks = filteredTasks.filter(t => {
-    if (!searchQuery.trim()) return true;
-    const lowerQuery = searchQuery.toLowerCase();
+    if (!debouncedQuery.trim()) return true;
+    const lowerQuery = debouncedQuery.toLowerCase();
     return t.title.toLowerCase().includes(lowerQuery) || t.description.toLowerCase().includes(lowerQuery);
   });
 
@@ -93,6 +106,7 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
           onSortChange={setSort}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          isSearching={isSearching} 
         />
       )}
       {showForm && <TaskForm onAddTask={handleAddTask} />}
