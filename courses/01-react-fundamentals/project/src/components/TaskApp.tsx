@@ -32,11 +32,8 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
         const savedData = localStorage.getItem('task-app-tasks');
         if (savedData) {
           const parsed: Task[] = JSON.parse(savedData);
-          
           const migration = parsed.map(t => ({
-            ...t,
-            category: t.category || 'General',
-            tags: t.tags || []
+            ...t, category: t.category || 'General', tags: t.tags || []
           }));
           setTasks(migration);
         } else {
@@ -47,7 +44,6 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
       }
       setIsInitialized(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 
 
   useEffect(() => {
@@ -77,41 +73,46 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
     if (setTasks) setTasks(tasks.filter(t => t.id !== id));
   };
 
-  const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[] }) => {
+  const handleUpdateTask = (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[]; dueDate?: string }) => {
     if (setTasks) setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));
     setEditingId(null);
   };
 
-  
-  const uniqueCategories = Array.from(
-    new Set(tasks.map(t => t.category).filter(Boolean))
-  );
-//status filkter
+  const uniqueCategories = Array.from(new Set(tasks.map(t => t.category).filter(Boolean)));
+
   const statusFiltered = tasks.filter(t => {
     if (filter === 'active') return !t.completed;
     if (filter === 'completed') return t.completed;
     return true; 
   });
 
-  // Category filter
   const categoryFiltered = statusFiltered.filter(t => {
     if (selectedCategory === 'all') return true;
     return t.category === selectedCategory;
   });
 
-  //  Search filter
   const searchedTasks = categoryFiltered.filter(t => {
     if (!debouncedQuery.trim()) return true;
     const lowerQuery = debouncedQuery.toLowerCase();
     return t.title.toLowerCase().includes(lowerQuery) || t.description.toLowerCase().includes(lowerQuery);
   });
 
-  // Sort
   const priorityWeight = { High: 3, Medium: 2, Low: 1 };
   const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === 'priority-high-low') return priorityWeight[b.priority] - priorityWeight[a.priority];
     if (sort === 'priority-low-high') return priorityWeight[a.priority] - priorityWeight[b.priority];
     if (sort === 'alphabetical') return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+    
+    if (sort === 'due-date-soonest') {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1; 
+      if (!b.dueDate) return -1;
+      
+      const timeA = new Date(a.dueDate).getTime();
+      const timeB = new Date(b.dueDate).getTime();
+      return timeA - timeB; 
+    }
+
     return 0;
   });
 
@@ -119,15 +120,11 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
     <div>
       {showFilterBar && (
         <FilterBar 
-          filter={filter} 
-          onFilterChange={setFilter} 
-          sort={sort}
-          onSortChange={setSort}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          filter={filter} onFilterChange={setFilter} 
+          sort={sort} onSortChange={setSort}
+          searchQuery={searchQuery} onSearchChange={setSearchQuery}
           isSearching={isSearching}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
+          selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory}
           categories={uniqueCategories}
         />
       )}
@@ -137,8 +134,7 @@ export default function TaskApp({ tasks = [], setTasks, showForm, showFilterBar 
         totalTasksCount={tasks.length} 
         onToggle={handleToggle} 
         onDelete={handleDelete} 
-        editingId={editingId}
-        setEditingId={setEditingId}
+        editingId={editingId} setEditingId={setEditingId}
         onUpdateTask={handleUpdateTask}
       />
     </div>

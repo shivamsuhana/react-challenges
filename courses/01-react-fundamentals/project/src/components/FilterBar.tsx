@@ -1,5 +1,5 @@
 export type FilterType = 'all' | 'active' | 'completed';
-export type SortType = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical';
+export type SortType = 'recently-added' | 'priority-high-low' | 'priority-low-high' | 'alphabetical' | 'due-date-soonest';
 
 interface FilterBarProps {
   filter: FilterType;
@@ -26,11 +26,7 @@ export default function FilterBar({
       <button data-active={filter === 'completed'} onClick={() => onFilterChange('completed')}>Completed</button>
 
       {onCategoryChange && (
-        <select 
-          id="category-filter" 
-          value={selectedCategory} 
-          onChange={(e) => onCategoryChange(e.target.value)}
-        >
+        <select id="category-filter" value={selectedCategory} onChange={(e) => onCategoryChange(e.target.value)}>
           <option value="all">All categories</option>
           {categories.map((cat, index) => (
             <option key={index} value={cat}>{cat}</option>
@@ -44,17 +40,15 @@ export default function FilterBar({
           <option value="priority-high-low">Priority: High to Low</option>
           <option value="priority-low-high">Priority: Low to High</option>
           <option value="alphabetical">Alphabetical</option>
+          <option value="due-date-soonest">Due Date (Soonest First)</option> 
         </select>
       )}
 
       {onSearchChange && (
         <div>
           <input 
-            id="search-input" 
-            type="text" 
-            placeholder="Search tasks..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
+            id="search-input" type="text" placeholder="Search tasks..."
+            value={searchQuery} onChange={(e) => onSearchChange(e.target.value)}
           />
           {isSearching && <span id="searching-indicator">Searching...</span>}
           {searchQuery.length > 0 && (

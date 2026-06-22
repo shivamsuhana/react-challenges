@@ -274,5 +274,28 @@
       "maintainability": 90,
       "overall": "The code is well-structured and well-tested, but can benefit from some improvements in terms of readability and maintainability. With some refactoring and additional comments, the code can be even more efficient and easier to understand."
     }
+  },
+  {
+    "challengeId": "13-due-dates-and-sorting",
+    "challengeName": "Due Dates and Sorting",
+    "aiReview": {
+      "challengeId": "13-due-dates-and-sorting",
+      "timestamp": "2026-06-22T01:46:13.752Z",
+      "score": 88,
+      "feedback": [],
+      "strengths": [
+        "The code is well-structured and organized, with clear separation of concerns between components.",
+        "The use of TypeScript and functional components promotes maintainability and scalability.",
+        "The code includes proper error handling and edge cases, such as handling null/undefined due dates in sorting."
+      ],
+      "improvements": [
+        "Some of the component props could be more descriptive, especially in the TaskCard component.",
+        "The code could benefit from more consistent naming conventions, such as using camelCase for variable names.",
+        "Some of the conditional statements could be simplified using early returns or more concise logic."
+      ],
+      "readability": 85,
+      "maintainability": 90,
+      "overall": "The code is well-written and demonstrates a good understanding of React and TypeScript principles. However, there are some minor improvements that could be made to enhance readability and maintainability."
+    }
   }
 ]

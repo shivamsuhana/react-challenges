@@ -8,17 +8,18 @@ interface TaskCardProps {
   completed?: boolean;
   category?: string;
   tags?: string[];
+  dueDate?: string;
   onToggle?: () => void;
   onDelete?: () => void;
   isEditing?: boolean;
   onEditStart?: () => void;
   onEditCancel?: () => void;
-  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[] }) => void;
+  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[]; dueDate?: string }) => void;
 }
 
 export default function TaskCard({ 
   id = 0, title, description, priority, completed = false, 
-  category = 'General', tags = [],
+  category = 'General', tags = [], dueDate,
   onToggle, onDelete, isEditing, onEditStart, onEditCancel, onUpdateTask 
 }: TaskCardProps) {
   
@@ -30,6 +31,7 @@ export default function TaskCard({
   const [editPriority, setEditPriority] = useState(priority);
   const [editCategory, setEditCategory] = useState(category);
   const [editTags, setEditTags] = useState(tags.join(', '));
+  const [editDueDate, setEditDueDate] = useState(dueDate || '');
 
   useEffect(() => {
     if (editing) {
@@ -38,8 +40,9 @@ export default function TaskCard({
       setEditPriority(priority);
       setEditCategory(category);
       setEditTags(tags.join(', '));
+      setEditDueDate(dueDate || '');
     }
-  }, [editing, title, description, priority, category, tags]);
+  }, [editing, title, description, priority, category, tags, dueDate]);
 
   const handleEditClick = () => {
     setIsLocalEditing(true);
@@ -60,11 +63,7 @@ export default function TaskCard({
   const handleSave = () => {
     if (editTitle.trim() === '') return; 
     
-
-    const parsedTags = editTags
-      .split(',')
-      .map(t => t.trim())
-      .filter(t => t.length > 0);
+    const parsedTags = editTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
 
     if (onUpdateTask) {
       onUpdateTask(id, {
@@ -72,13 +71,39 @@ export default function TaskCard({
         description: editDesc.trim(),
         priority: editPriority,
         category: editCategory.trim() || 'General',
-        tags: parsedTags
+        tags: parsedTags,
+        dueDate: editDueDate || undefined
       });
     }
     
     setIsLocalEditing(false);
     if (onEditCancel) onEditCancel();
   };
+
+  let isOverdue = false;
+  let isDueToday = false;
+  let isDueSoon = false;
+  let formattedDate = '';
+
+  if (dueDate) {
+    const [y, m, d] = dueDate.split('-');
+    const taskDate = new Date(Number(y), Number(m) - 1, Number(d));
+    taskDate.setHours(0, 0, 0, 0);
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    formattedDate = taskDate.toLocaleDateString();
+    
+    const diffTime = taskDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (!completed) {
+      if (diffDays < 0) isOverdue = true;
+      else if (diffDays === 0) isDueToday = true;
+      else if (diffDays > 0 && diffDays <= 3) isDueSoon = true;
+    }
+  }
 
   if (editing) {
     return (
@@ -91,7 +116,8 @@ export default function TaskCard({
           <option value="Low">Low</option>
         </select>
         <input type="text" value={editCategory} onChange={(e) => setEditCategory(e.target.value)} />
-        <input type="text" value={editTags} onChange={(e) => setEditTags(e.target.value)} placeholder="tags separate by comma" />
+        <input type="text" value={editTags} onChange={(e) => setEditTags(e.target.value)} placeholder="tags" />
+        <input type="date" value={editDueDate} onChange={(e) => setEditDueDate(e.target.value)} />
         <button onClick={handleSave}>Save</button>
         <button onClick={handleCancelClick}>Cancel</button>
       </div>
@@ -99,12 +125,28 @@ export default function TaskCard({
   }
 
   return (
-    <div className="task-card" data-completed={completed} style={{ textDecoration: completed ? 'line-through' : 'none' }}>
+    <div 
+      className="task-card" 
+      data-completed={completed} 
+      data-overdue={isOverdue}
+      style={{ 
+        textDecoration: completed ? 'line-through' : 'none',
+        border: isOverdue ? '2px solid red' : '1px solid #ccc'
+      }}
+    >
       <h2>{title}</h2>
       <p>{description}</p>
       <p>Priority: {priority}</p>
       
-      
+      {dueDate && (
+        <div id="task-due-date">
+          Due: {formattedDate}
+          {isOverdue && <span style={{ color: 'red', marginLeft: '10px' }}>Overdue</span>}
+          {isDueToday && <span style={{ color: 'orange', marginLeft: '10px' }}>Due Today</span>}
+          {isDueSoon && <span style={{ color: 'blue', marginLeft: '10px' }}>Due Soon</span>}
+        </div>
+      )}
+
       <div id="task-category">Category: {category}</div>
       <div id="task-tags">
         {tags.map((tag, idx) => (

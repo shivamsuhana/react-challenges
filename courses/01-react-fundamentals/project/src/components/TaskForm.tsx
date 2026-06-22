@@ -11,6 +11,7 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
   const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>('Medium');
   const [category, setCategory] = useState('General');
   const [tagsInput, setTagsInput] = useState('');
+  const [dueDate, setDueDate] = useState(''); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,17 +29,18 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
       priority,
       completed: false,
       category: category.trim() || 'General',
-      tags: parsedTags
+      tags: parsedTags,
+      dueDate: dueDate || undefined 
     };
 
     onAddTask(newTask);
     
-    // Reset states
     setTitle('');
     setDescription('');
     setPriority('Medium');
     setCategory('General');
     setTagsInput('');
+    setDueDate('');
   };
 
   return (
@@ -52,6 +54,7 @@ export default function TaskForm({ onAddTask }: TaskFormProps) {
       </select>
       <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} />
       <input type="text" placeholder="Tags (comma separated)" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} />
+      <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
       <button type="submit">Add Task</button>
     </form>
   );

@@ -1,13 +1,15 @@
 import TaskCard from './TaskCard';
 
+
 export interface Task {
   id: number;
   title: string;
   description: string;
   priority: 'Low' | 'Medium' | 'High';
   completed: boolean;
-  category: string; 
-  tags: string[];   
+  category: string;
+  tags: string[];
+  dueDate?: string; 
 }
 
 interface TaskListProps {
@@ -17,7 +19,7 @@ interface TaskListProps {
   totalTasksCount?: number;
   editingId?: number | null;
   setEditingId?: (id: number | null) => void;
-  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[] }) => void;
+  onUpdateTask?: (id: number, updates: { title: string; description: string; priority: 'Low' | 'Medium' | 'High'; category: string; tags: string[]; dueDate?: string }) => void;
 }
 
 export default function TaskList({ 
@@ -46,6 +48,7 @@ export default function TaskList({
               completed={task.completed} 
               category={task.category}
               tags={task.tags}
+              dueDate={task.dueDate}
               onToggle={onToggle ? () => onToggle(task.id) : undefined} 
               onDelete={onDelete ? () => onDelete(task.id) : undefined}
               isEditing={editingId === task.id}
